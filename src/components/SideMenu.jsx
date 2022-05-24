@@ -6,35 +6,35 @@ import { Link } from "react-router-dom";
 const SideMenu = () => {
   return (
     <>
-      <div class="main-sidebar main-sidemenu main-sidebar-sticky side-menu">
-        <div class="sidemenu-logo">
-          <a class="main-logo">
+      <div className="main-sidebar main-sidemenu main-sidebar-sticky side-menu">
+        <div className="sidemenu-logo">
+          <a className="main-logo">
             <Link to="/dashboard" style={{ textDecoration: "none" }}>
               <img
-                src="img/brand/logo.png"
-                class="header-brand-img desktop-logo"
+                src="/img/brand/logo.png"
+                className="header-brand-img desktop-logo"
                 alt="logo"
               />
             </Link>
             <img
-              src="img/brand/icon.png"
-              class="header-brand-img icon-logo"
+              src="/img/brand/icon.png"
+              className="header-brand-img icon-logo"
               alt="logo"
             />
             <img
-              src="img/brand/logo-light.png"
-              class="header-brand-img desktop-logo theme-logo"
+              src="/img/brand/logo-light.png"
+              className="header-brand-img desktop-logo theme-logo"
               alt="logo"
             />
             <img
-              src="img/brand/icon-light.png"
-              class="header-brand-img icon-logo theme-logo"
+              src="/img/brand/icon-light.png"
+              className="header-brand-img icon-logo theme-logo"
               alt="logo"
             />
           </a>
         </div>
-        <div class="main-sidebar-body">
-          <div class="slide-left disabled" id="slide-left">
+        <div className="main-sidebar-body">
+          <div className="slide-left disabled" id="slide-left">
             <svg
               xmlns="http://www.w3.org/2000/svg"
               fill="#7b8191"
@@ -45,20 +45,34 @@ const SideMenu = () => {
               <path d="M13.293 6.293 7.586 12l5.707 5.707 1.414-1.414L10.414 12l4.293-4.293z" />
             </svg>
           </div>
-          <ul class="nav  hor-menu">
+          <ul className="nav  hor-menu">
             <Link to="/dashboard" style={{ textDecoration: "none" }}>
-              <li class="nav-label">Dashboard</li>
+              <li className="nav-label">Dashboard</li>
             </Link>
-            <li class="nav-item">
+            <li className="nav-item">
               <Link to="/dashboard" style={{ textDecoration: "none" }}>
-                <a class="nav-link">
-                  <i class="fe fe-airplay"></i>
-                  <span class="sidemenu-label">Dashboard</span>
+                <a className="nav-link">
+                  <i className="fe fe-airplay"></i>
+                  <span className="sidemenu-label">Dashboard</span>
                 </a>
               </Link>
             </li>
           </ul>
-          <div class="slide-right" id="slide-right">
+
+          <ul className="nav  hor-menu">
+            <Link to="/category" style={{ textDecoration: "none" }}>
+              <li className="nav-label">Category</li>
+            </Link>
+            <li className="nav-item">
+              <Link to="/category" style={{ textDecoration: "none" }}>
+                <a className="nav-link">
+                  <i className="fe fe-airplay"></i>
+                  <span className="sidemenu-label">Category</span>
+                </a>
+              </Link>
+            </li>
+          </ul>
+          <div className="slide-right" id="slide-right">
             <svg
               xmlns="http://www.w3.org/2000/svg"
               fill="#7b8191"

@@ -6,6 +6,11 @@ const Header = () => {
   const logout = () => {
     localStorage.clear();
   };
+
+  const items = JSON.parse(localStorage.getItem("Info"));
+
+  // console.log(items.user.id);
+
   return (
     <>
       <div className="main-header side-header sticky">
@@ -72,14 +77,21 @@ const Header = () => {
                   {/* href="profile.html" */}
                   <li className="dropdown header">
                     <a className="dropdown-item text-wrap">
-                      <i className="fe fe-edit"></i> Profile
+                      <Link
+                        to={`/profile/${items.user.id}`}
+                        style={{ textDecoration: "none" }}
+                      >
+                        <i className="fe fe-edit"></i> Profile
+                      </Link>
                     </a>
                   </li>
 
                   {/* href="settings.html" */}
                   <li className="dropdown header">
                     <a className="dropdown-item text-wrap">
-                      <i className="fe fe-settings"></i> Settings
+                      <Link to="/reset" style={{ textDecoration: "none" }}>
+                        <i className="fe fe-unlock"></i> Reset
+                      </Link>
                     </a>
                   </li>
 

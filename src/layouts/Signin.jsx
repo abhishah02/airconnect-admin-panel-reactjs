@@ -29,8 +29,14 @@ const Signin = () => {
     });
 
     let res = await result.json();
-    if (res.st) {
-      localStorage.setItem("Info", JSON.stringify(res));
+    if (res.user.st) {
+      localStorage.setItem(
+        "Info",
+        JSON.stringify({
+          token: res.accessToken,
+          user: res.user,
+        })
+      ); // remain only send token
       navigate("/dashboard");
     } else {
       alert(res.msg);
