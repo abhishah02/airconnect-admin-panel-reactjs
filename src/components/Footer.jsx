@@ -1,5 +1,6 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import React from "react";
+import { Link } from "react-router-dom";
 
 const Footer = () => {
   return (
@@ -9,11 +10,10 @@ const Footer = () => {
           <div className="col-md-12">
             <span>
               Copyright © 2022{" "}
-              <a href="/dashboard" className="text-primary">
-                Dashlead
-              </a>
-              . Designed with <span className="fa fa-heart text-danger"></span>{" "}
-              by{" "}
+              <Link to="/dashboard" style={{ textDecoration: "none" }}>
+                <a className="text-primary">Dashlead</a>.
+              </Link>
+              Designed with <span className="fa fa-heart text-danger"></span> by{" "}
               <a href="https://www.spruko.com/" className="text-primary">
                 Spruko
               </a>

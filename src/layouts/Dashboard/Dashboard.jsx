@@ -1,7 +1,7 @@
 import React from "react";
-import Footer from "../components/Footer";
-import Header from "../components/Header";
-import SideMenu from "../components/SideMenu";
+import Footer from "../../components/Footer";
+import Header from "../../components/Header";
+import SideMenu from "../../components/SideMenu";
 
 const Dashboard = () => {
   return (
@@ -9,9 +9,9 @@ const Dashboard = () => {
       <Header />
       <SideMenu />
 
-      <div class="text-center">
-        <div class="row">
-          <div class="col-md-16">
+      <div className="text-center">
+        <div className="row">
+          <div className="col-md-16">
             <h1>Dashboard</h1>
           </div>
         </div>

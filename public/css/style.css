@@ -16939,6 +16939,9 @@ div.dt-button-collection {
     }
 
     .main-footer {
+        position: fixed;
+        bottom: 0;
+        width: 100%;
         padding: 20px 20px 20px 270px;
         font-size: 14px;
         font-weight: 400;

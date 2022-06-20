@@ -4,6 +4,7 @@ import React from "react";
 import { Link } from "react-router-dom";
 
 const SideMenu = () => {
+  const authAdmin = JSON.parse(localStorage.getItem("Info"));
   return (
     <>
       <div className="main-sidebar main-sidemenu main-sidebar-sticky side-menu">
@@ -45,10 +46,10 @@ const SideMenu = () => {
               <path d="M13.293 6.293 7.586 12l5.707 5.707 1.414-1.414L10.414 12l4.293-4.293z" />
             </svg>
           </div>
+
           <ul className="nav  hor-menu">
-            <Link to="/dashboard" style={{ textDecoration: "none" }}>
-              <li className="nav-label">Dashboard</li>
-            </Link>
+            <li className="nav-label">Dashboard</li>
+
             <li className="nav-item">
               <Link to="/dashboard" style={{ textDecoration: "none" }}>
                 <a className="nav-link">
@@ -60,9 +61,8 @@ const SideMenu = () => {
           </ul>
 
           <ul className="nav  hor-menu">
-            <Link to="/category" style={{ textDecoration: "none" }}>
-              <li className="nav-label">Category</li>
-            </Link>
+            <li className="nav-label">Category</li>
+
             <li className="nav-item">
               <Link to="/category" style={{ textDecoration: "none" }}>
                 <a className="nav-link">
@@ -71,7 +71,66 @@ const SideMenu = () => {
                 </a>
               </Link>
             </li>
+            <li className="nav-item">
+              <Link to="/product" style={{ textDecoration: "none" }}>
+                <a className="nav-link">
+                  <i className="fe fe-airplay"></i>
+                  <span className="sidemenu-label">Product</span>
+                </a>
+              </Link>
+            </li>
           </ul>
+
+          <ul className="nav  hor-menu">
+            <li className="nav-label">Customer</li>
+
+            <li className="nav-item">
+              <Link to="/customer" style={{ textDecoration: "none" }}>
+                <a className="nav-link">
+                  <i className="fe fe-airplay"></i>
+                  <span className="sidemenu-label">Customer</span>
+                </a>
+              </Link>
+            </li>
+            <li className="nav-item">
+              <Link to="/hsn" style={{ textDecoration: "none" }}>
+                <a className="nav-link">
+                  <i className="fe fe-airplay"></i>
+                  <span className="sidemenu-label">HSN Master</span>
+                </a>
+              </Link>
+            </li>
+          </ul>
+
+          <ul className="nav  hor-menu">
+            <li className="nav-label">Sales</li>
+
+            <li className="nav-item">
+              <Link to="/sales" style={{ textDecoration: "none" }}>
+                <a className="nav-link">
+                  <i className="fe fe-airplay"></i>
+                  <span className="sidemenu-label">Sales</span>
+                </a>
+              </Link>
+            </li>
+          </ul>
+          {authAdmin?.user?.role === 1 ? (
+            <ul className="nav  hor-menu">
+              <li className="nav-label">Sub Admin</li>
+
+              <li className="nav-item">
+                <Link to="/sub-admin" style={{ textDecoration: "none" }}>
+                  <a className="nav-link">
+                    <i className="fe fe-airplay"></i>
+                    <span className="sidemenu-label">Sub-Admin</span>
+                  </a>
+                </Link>
+              </li>
+            </ul>
+          ) : (
+            ""
+          )}
+
           <div className="slide-right" id="slide-right">
             <svg
               xmlns="http://www.w3.org/2000/svg"

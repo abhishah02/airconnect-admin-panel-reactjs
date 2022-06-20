@@ -30,14 +30,27 @@ const Signin = () => {
 
     let res = await result.json();
     if (res.user.st) {
-      localStorage.setItem(
-        "Info",
-        JSON.stringify({
-          token: res.accessToken,
-          user: res.user,
-        })
-      ); // remain only send token
-      navigate("/dashboard");
+      if (res.user.role === 1) {
+        localStorage.setItem(
+          "Info",
+          JSON.stringify({
+            token: res.accessToken,
+            user: res.user,
+          })
+        );
+        navigate("/dashboard");
+        window.location.reload();
+      } else {
+        localStorage.setItem(
+          "Info",
+          JSON.stringify({
+            token: res.accessToken,
+            user: res.user,
+          })
+        ); // remain only send token
+        navigate("/dashboard");
+        window.location.reload();
+      }
     } else {
       alert(res.msg);
     }
