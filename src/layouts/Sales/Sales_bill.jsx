@@ -172,10 +172,11 @@ function SalesBill() {
     let token = "bearer " + items.token;
 
     const result = await axios.post(
-      "http://localhost:5000/addProductData",
+      "http://localhost:5000/insertEditSales",
       JSON.stringify([
         { data: data },
         {
+          SALES_ID: "",
           SALES_BILL_NO: billNo,
           SALES_DATE: date,
           CUSTOMER_ID: customerId,

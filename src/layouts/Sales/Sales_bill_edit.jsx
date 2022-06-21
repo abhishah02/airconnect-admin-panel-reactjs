@@ -232,7 +232,7 @@ function SalesBillEdit() {
     let token = "bearer " + items.token;
 
     const result = await axios.post(
-      "http://localhost:5000/updateBillData",
+      "http://localhost:5000/insertEditSales",
       JSON.stringify([
         { data: data },
         {
