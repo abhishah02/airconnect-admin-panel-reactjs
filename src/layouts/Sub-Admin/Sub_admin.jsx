@@ -225,8 +225,9 @@ const SubAdmin = () => {
     let token = "bearer " + items.token;
 
     const result = await axios.post(
-      "http://localhost:5000/addSubAdmin",
+      "http://localhost:5000/insertEditAdmin",
       JSON.stringify({
+        id: "",
         admin_name: name,
         admin_number: number,
         admin_email: email,
@@ -271,7 +272,7 @@ const SubAdmin = () => {
     let token = "bearer " + items.token;
 
     const result = await axios.post(
-      "http://localhost:5000/updateSubAdmin",
+      "http://localhost:5000/insertEditAdmin",
       JSON.stringify({
         id: updateId.id,
         admin_name: updateName,

@@ -172,8 +172,9 @@ const HsnMaster = () => {
     let token = "bearer " + items.token;
 
     const result = await axios.post(
-      "http://localhost:5000/addHsn",
+      "http://localhost:5000/insertEditHsn",
       JSON.stringify({
+        HSN_ID: "",
         HSN_CODE: code,
         IGST: igst,
         CGST: cgst,
@@ -220,7 +221,7 @@ const HsnMaster = () => {
     let token = "bearer " + items.token;
 
     const result = await axios.post(
-      "http://localhost:5000/updateHsn",
+      "http://localhost:5000/insertEditHsn",
       JSON.stringify({
         HSN_ID: updateId.HSN_ID,
         HSN_CODE: updateCode,

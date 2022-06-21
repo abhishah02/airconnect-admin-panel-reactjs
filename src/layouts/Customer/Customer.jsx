@@ -290,8 +290,9 @@ const Customer = () => {
     let token = "bearer " + items.token;
 
     const result = await axios.post(
-      "http://localhost:5000/addCustomer",
+      "http://localhost:5000/insertEditCustomer",
       JSON.stringify({
+        CUSTOMER_ID: "",
         CUSTOMER_NAME: name,
         CUSTOMER_PHONE_NO: numberOne,
         CUSTOMER_WHATSAPP_NO: numberTwo,
@@ -370,7 +371,7 @@ const Customer = () => {
     let token = "bearer " + items.token;
 
     const result = await axios.post(
-      "http://localhost:5000/updateCustomer",
+      "http://localhost:5000/insertEditCustomer",
       JSON.stringify({
         CUSTOMER_ID: updateId.CUSTOMER_ID,
         CUSTOMER_NAME: updateName,

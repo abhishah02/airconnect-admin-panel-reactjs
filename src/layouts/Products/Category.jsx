@@ -151,30 +151,6 @@ const Category = () => {
 
   const handlePerRowsChange = async (newPerPage) => {
     setPerPage(newPerPage);
-    // const items = JSON.parse(localStorage.getItem("Info"));
-    // let token = "bearer " + items.token;
-    // setLoading(true);
-
-    // await axios
-    //   .get(
-    //     `http://localhost:5000/getCategory?search=${search}&page=${page}&per_page=${newPerPage}&delay=1`,
-    //     {
-    //       headers: {
-    //         Authorization: token,
-    //         enctype: "multipart/form-data",
-    //       },
-    //     }
-    //   )
-    //   .then(function (response) {
-    //     setData(response.data.data);
-    //     // setFilterData(response.data.data);
-    //     setSize(newPerPage);
-    //     setLoading(false);
-    //   })
-    //   .catch(function (err) {
-    //     localStorage.removeItem("Info");
-    //     window.location.reload();
-    //   });
   };
 
   //=+=+=+==+=+=+==+=+=+==+=+=+==+=+=+==+=+=+==+=+=+==+=+=+==+=+=+==+=+=+==+=+=+==+=+=+==+=+=+==+=+=+=
@@ -196,12 +172,13 @@ const Category = () => {
     let token = "bearer " + items.token;
 
     const formData = new FormData();
+    formData.append("CATEGORY_ID", "");
     formData.append("CATEGORY_NAME", name);
     formData.append("CATEGORY_DESCRIPTION", description);
     formData.append("DESCRIPTION_IMAGE", img);
 
     const result = await axios.post(
-      "http://localhost:5000/Category",
+      "http://localhost:5000/insertEditCategory",
       formData,
       {
         method: "POST",
@@ -278,7 +255,7 @@ const Category = () => {
     formData.append("DESCRIPTION_IMAGE", updateImage);
 
     const result = await axios.post(
-      "http://localhost:5000/updateCategory",
+      "http://localhost:5000/insertEditCategory",
       formData,
       {
         method: "POST",

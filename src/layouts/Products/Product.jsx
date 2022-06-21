@@ -294,6 +294,7 @@ const Category = () => {
     let token = "bearer " + items.token;
 
     const formData = new FormData();
+    formData.append("PRODUCT_ID", "");
     formData.append("CATEGORY_ID", categoryId);
     formData.append("HSN_ID", hsnId);
     formData.append("PRODUCT_NAME", pname);
@@ -302,7 +303,7 @@ const Category = () => {
     formData.append("PRODUCT_IMAGE", img);
 
     const result = await axios.post(
-      "http://localhost:5000/addProduct",
+      "http://localhost:5000/insertEditProduct",
       formData,
       {
         method: "POST",
@@ -357,7 +358,7 @@ const Category = () => {
 
     //result api
     const result = await axios.post(
-      "http://localhost:5000/updateProduct",
+      "http://localhost:5000/insertEditProduct",
       formData,
       {
         method: "POST",
