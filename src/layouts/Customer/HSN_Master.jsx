@@ -23,24 +23,32 @@ const HsnMaster = () => {
 
   const [loading, setLoading] = useState(false);
   const [totalRows, setTotalRows] = useState(0);
-  const [size, setSize] = useState(10);
+  // const [size, setSize] = useState(10);
 
   //form open and close
   const [show, setShow] = useState(false);
-  const handleInsertClose = () => setShow(false);
+  const handleInsertClose = () => {
+    updateId("");
+    setCode("");
+    setIgst("");
+    setCgst("");
+    setSgst("");
+    setDescription("");
+    setShow(false);
+  };
   const handleInsertShow = () => setShow(true);
 
-  const [showUpdate, setShowUpdate] = useState(false);
-  const handleUpdateClose = () => setShowUpdate(false);
+  // const [showUpdate, setShowUpdate] = useState(false);
+  // const handleUpdateClose = () => setShowUpdate(false);
   const handleUpdateShow = (row) => {
-    setUpdateId(row);
-    setUpdateCode(row.HSN_CODE);
-    setUpdateIgst(row.IGST);
-    setUpdateCgst(row.CGST);
-    setUpdateSgst(row.SGST);
-    setUpdateDescription(row.DESCRIPTION);
+    setUpdateId(row.HSN_ID);
+    setCode(row.HSN_CODE);
+    setIgst(row.IGST);
+    setCgst(row.CGST);
+    setSgst(row.SGST);
+    setDescription(row.DESCRIPTION);
 
-    setShowUpdate(true);
+    setShow(true);
   };
 
   const [page, setPage] = useState(1);
@@ -128,7 +136,7 @@ const HsnMaster = () => {
 
     await axios
       .get(
-        `http://localhost:5000/getHSN?search=${search}&page=${page}&per_page=${size}&delay=1`,
+        `http://localhost:5000/getHSN?search=${search}&page=${page}&per_page=${perPage}&delay=1`,
         {
           headers: {
             Authorization: token,
@@ -160,6 +168,7 @@ const HsnMaster = () => {
   //This API is to store data using form.
   //insert data
 
+  const [updateId, setUpdateId] = useState("");
   const [code, setCode] = useState("");
   const [igst, setIgst] = useState("");
   const [cgst, setCgst] = useState("");
@@ -174,7 +183,7 @@ const HsnMaster = () => {
     const result = await axios.post(
       "http://localhost:5000/insertEditHsn",
       JSON.stringify({
-        HSN_ID: "",
+        HSN_ID: updateId,
         HSN_CODE: code,
         IGST: igst,
         CGST: cgst,
@@ -194,12 +203,13 @@ const HsnMaster = () => {
       // alert(res.msg);
       toast.success(res.msg);
       setShow(false);
+      setUpdateId("");
       setCode("");
       setIgst("");
       setCgst("");
       setSgst("");
       setDescription("");
-      fetchHSN(1);
+      fetchHSN();
     } else {
       alert(res.msg);
     }
@@ -207,47 +217,45 @@ const HsnMaster = () => {
 
   //update
 
-  const [updateId, setUpdateId] = useState("");
+  // const [updateCode, setUpdateCode] = useState("");
+  // const [updateIgst, setUpdateIgst] = useState("");
+  // const [updateCgst, setUpdateCgst] = useState("");
+  // const [updateSgst, setUpdateSgst] = useState("");
+  // const [updateCescription, setUpdateDescription] = useState("");
 
-  const [updateCode, setUpdateCode] = useState("");
-  const [updateIgst, setUpdateIgst] = useState("");
-  const [updateCgst, setUpdateCgst] = useState("");
-  const [updateSgst, setUpdateSgst] = useState("");
-  const [updateCescription, setUpdateDescription] = useState("");
+  // const updateHSN = async (e) => {
+  //   e.preventDefault();
+  //   const items = JSON.parse(localStorage.getItem("Info"));
+  //   let token = "bearer " + items.token;
 
-  const updateHSN = async (e) => {
-    e.preventDefault();
-    const items = JSON.parse(localStorage.getItem("Info"));
-    let token = "bearer " + items.token;
-
-    const result = await axios.post(
-      "http://localhost:5000/insertEditHsn",
-      JSON.stringify({
-        HSN_ID: updateId.HSN_ID,
-        HSN_CODE: updateCode,
-        IGST: updateIgst,
-        CGST: updateCgst,
-        SGST: updateSgst,
-        DESCRIPTION: updateCescription,
-      }),
-      {
-        headers: {
-          "Content-type": "application/json",
-          Authorization: token,
-        },
-      }
-    );
-    let res = await result.data;
-    console.log(res);
-    if (res.st) {
-      // alert(res.msg);
-      toast.success(res.msg);
-      setShowUpdate(false);
-      fetchHSN(1);
-    } else {
-      alert(res.msg);
-    }
-  };
+  //   const result = await axios.post(
+  //     "http://localhost:5000/insertEditHsn",
+  //     JSON.stringify({
+  //       HSN_ID: updateId.HSN_ID,
+  //       HSN_CODE: updateCode,
+  //       IGST: updateIgst,
+  //       CGST: updateCgst,
+  //       SGST: updateSgst,
+  //       DESCRIPTION: updateCescription,
+  //     }),
+  //     {
+  //       headers: {
+  //         "Content-type": "application/json",
+  //         Authorization: token,
+  //       },
+  //     }
+  //   );
+  //   let res = await result.data;
+  //   console.log(res);
+  //   if (res.st) {
+  //     // alert(res.msg);
+  //     toast.success(res.msg);
+  //     setShowUpdate(false);
+  //     fetchHSN(1);
+  //   } else {
+  //     alert(res.msg);
+  //   }
+  // };
 
   //delete data
 
@@ -281,7 +289,7 @@ const HsnMaster = () => {
 
   useEffect(() => {
     fetchHSN();
-  }, [search, page]);
+  }, [search, page, perPage]);
 
   // useEffect(() => {
   //   fetchHSN(1); //fetch page 1 of categorys
@@ -383,7 +391,7 @@ const HsnMaster = () => {
                     </Modal>
                     {/* //=+=+=+==+=+=+==+=+=+==+=+=+==+=+=+==+=+=+==+=+=+==+=+=+==+=+=+==+=+=+==+=+=+==+=+=+==+=+=+==+=+=+= */}
                     {/* Update HSN form */}
-                    <Modal show={showUpdate} onHide={handleUpdateClose}>
+                    {/* <Modal show={showUpdate} onHide={handleUpdateClose}>
                       <Modal.Header closeButton>
                         <Modal.Title>Update Data Form</Modal.Title>
                       </Modal.Header>
@@ -455,7 +463,7 @@ const HsnMaster = () => {
                           Save Changes
                         </Button>
                       </Modal.Footer>
-                    </Modal>
+                    </Modal> */}
                     {/* //=+=+=+==+=+=+==+=+=+==+=+=+==+=+=+==+=+=+==+=+=+==+=+=+==+=+=+==+=+=+==+=+=+==+=+=+==+=+=+==+=+=+= */}
 
                     <DataTable

@@ -26,22 +26,28 @@ const Category = () => {
 
   const [loading, setLoading] = useState(false);
   const [totalRows, setTotalRows] = useState(0);
-  const [size, setSize] = useState(10);
+  // const [size, setSize] = useState(10);
 
   //form open and close
   const [show, setShow] = useState(false);
-  const [showUpdate, setShowUpdate] = useState(false);
+  // const [showUpdate, setShowUpdate] = useState(false);
 
-  const handleInsertClose = () => setShow(false);
+  const handleInsertClose = () => {
+    setUpdateId("");
+    setName("");
+    setDescription("");
+    setImg([]);
+    setShow(false);
+  };
   const handleInsertShow = () => setShow(true);
 
-  const handleUpdateClose = () => setShowUpdate(false);
+  // const handleUpdateClose = () => setShowUpdate(false);
   const handleUpdateShow = (row) => {
-    setUpdateId(row);
-    setUpdateName(row.CATEGORY_NAME);
-    setUpdateDescription(row.CATEGORY_DESCRIPTION);
-    setUpdateImage(row);
-    setShowUpdate(true);
+    setUpdateId(row.CATEGORY_ID);
+    setName(row.CATEGORY_NAME);
+    setDescription(row.CATEGORY_DESCRIPTION);
+    setImg(row);
+    setShow(true);
   };
 
   const [page, setPage] = useState(1);
@@ -125,7 +131,7 @@ const Category = () => {
 
     await axios
       .get(
-        `http://localhost:5000/getCategory?search=${search}&page=${page}&per_page=${size}&delay=1`,
+        `http://localhost:5000/getCategory?search=${search}&page=${page}&per_page=${perPage}&delay=1`,
         {
           headers: {
             Authorization: token,
@@ -157,6 +163,7 @@ const Category = () => {
   //This API is to store data using form.
   //insert data
 
+  const [updateId, setUpdateId] = useState("");
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
   const [img, setImg] = useState([]);
@@ -172,7 +179,7 @@ const Category = () => {
     let token = "bearer " + items.token;
 
     const formData = new FormData();
-    formData.append("CATEGORY_ID", "");
+    formData.append("CATEGORY_ID", updateId);
     formData.append("CATEGORY_NAME", name);
     formData.append("CATEGORY_DESCRIPTION", description);
     formData.append("DESCRIPTION_IMAGE", img);
@@ -194,9 +201,11 @@ const Category = () => {
       // alert(res.msg);
       toast.success(res.msg);
       setShow(false);
+      setUpdateId("");
       setName("");
       setDescription("");
-      fetchCategorys(1);
+      setImg([]);
+      fetchCategorys();
     } else {
       alert(res.msg);
     }
@@ -234,52 +243,51 @@ const Category = () => {
 
   // update data
 
-  const [updateId, setUpdateId] = useState("");
-  const [updateName, setUpdateName] = useState("");
-  const [updateDescription, setUpdateDescription] = useState("");
-  const [updateImage, setUpdateImage] = useState([]);
+  // const [updateName, setUpdateName] = useState("");
+  // const [updateDescription, setUpdateDescription] = useState("");
+  // const [updateImage, setUpdateImage] = useState([]);
 
-  const imgUpdateChange = (e) => {
-    setUpdateImage(e.target.files[0]);
-  };
+  // const imgUpdateChange = (e) => {
+  //   setUpdateImage(e.target.files[0]);
+  // };
 
-  const updateCategory = async (e) => {
-    e.preventDefault();
-    const items = JSON.parse(localStorage.getItem("Info"));
-    let token = "bearer " + items.token;
+  // const updateCategory = async (e) => {
+  //   e.preventDefault();
+  //   const items = JSON.parse(localStorage.getItem("Info"));
+  //   let token = "bearer " + items.token;
 
-    const formData = new FormData();
-    formData.append("CATEGORY_ID", updateId.CATEGORY_ID);
-    formData.append("CATEGORY_NAME", updateName);
-    formData.append("CATEGORY_DESCRIPTION", updateDescription);
-    formData.append("DESCRIPTION_IMAGE", updateImage);
+  //   const formData = new FormData();
+  //   formData.append("CATEGORY_ID", updateId.CATEGORY_ID);
+  //   formData.append("CATEGORY_NAME", updateName);
+  //   formData.append("CATEGORY_DESCRIPTION", updateDescription);
+  //   formData.append("DESCRIPTION_IMAGE", updateImage);
 
-    const result = await axios.post(
-      "http://localhost:5000/insertEditCategory",
-      formData,
-      {
-        method: "POST",
-        headers: {
-          Authorization: token,
-          enctype: "multipart/form-data",
-        },
-      }
-    );
-    let res = await result.data;
-    console.log(res);
-    if (res.st) {
-      // alert(res.msg);
-      toast.success(res.msg);
-      setShowUpdate(false);
-      fetchCategorys();
-    } else {
-      alert(res.msg);
-    }
-  };
+  //   const result = await axios.post(
+  //     "http://localhost:5000/insertEditCategory",
+  //     formData,
+  //     {
+  //       method: "POST",
+  //       headers: {
+  //         Authorization: token,
+  //         enctype: "multipart/form-data",
+  //       },
+  //     }
+  //   );
+  //   let res = await result.data;
+  //   console.log(res);
+  //   if (res.st) {
+  //     // alert(res.msg);
+  //     toast.success(res.msg);
+  //     setShowUpdate(false);
+  //     fetchCategorys();
+  //   } else {
+  //     alert(res.msg);
+  //   }
+  // };
 
   useEffect(() => {
     fetchCategorys();
-  }, [search, page]);
+  }, [search, page, perPage]);
 
   // useEffect(() => {
   //   fetchCategorys(1); //fetch page 1 of categorys
@@ -363,7 +371,7 @@ const Category = () => {
                     {/* //=+=+=+==+=+=+==+=+=+==+=+=+==+=+=+==+=+=+==+=+=+==+=+=+==+=+=+==+=+=+==+=+=+==+=+=+==+=+=+==+=+=+= */}
 
                     {/* update category form */}
-                    <Modal show={showUpdate} onHide={handleUpdateClose}>
+                    {/* <Modal show={showUpdate} onHide={handleUpdateClose}>
                       <Modal.Header closeButton>
                         <Modal.Title>Update Data Form</Modal.Title>
                       </Modal.Header>
@@ -412,7 +420,7 @@ const Category = () => {
                           Save Changes
                         </Button>
                       </Modal.Footer>
-                    </Modal>
+                    </Modal> */}
                     {/* //=+=+=+==+=+=+==+=+=+==+=+=+==+=+=+==+=+=+==+=+=+==+=+=+==+=+=+==+=+=+==+=+=+==+=+=+==+=+=+==+=+=+= */}
                     <DataTable
                       title="Category"

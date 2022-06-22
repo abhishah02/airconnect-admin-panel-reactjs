@@ -22,7 +22,7 @@ const Sales = () => {
 
   const [loading, setLoading] = useState(false);
   const [totalRows, setTotalRows] = useState(0);
-  const [size, setSize] = useState(10);
+  // const [size, setSize] = useState(10);
 
   const [page, setPage] = useState(1);
   const [perPage, setPerPage] = useState(10);
@@ -150,7 +150,7 @@ const Sales = () => {
 
     await axios
       .get(
-        `http://localhost:5000/getbill?search=${search}&page=${page}&per_page=${size}&delay=1`,
+        `http://localhost:5000/getbill?search=${search}&page=${page}&per_page=${perPage}&delay=1`,
         {
           headers: {
             Authorization: token,
@@ -162,6 +162,7 @@ const Sales = () => {
         setMainData(res.data.data);
 
         // setFilterData(res.data.data);
+        alert(JSON.stringify(res.data.total));
         setTotalRows(res.data.total);
         setLoading(false);
       })
@@ -176,37 +177,13 @@ const Sales = () => {
   };
 
   const handlePerRowsChange = async (newPerPage) => {
+    // fetchBillData();
     setPerPage(newPerPage);
-    // const items = JSON.parse(localStorage.getItem("Info"));
-    // let token = "bearer " + items.token;
-    // setLoading(true);
-
-    // await axios
-    //   .get(
-    //     `http://localhost:5000/getbill?search=${search}&page=${page}&per_page=${newPerPage}&delay=1`,
-    //     {
-    //       headers: {
-    //         Authorization: token,
-    //         enctype: "multipart/form-data",
-    //       },
-    //     }
-    //   )
-    //   .then(function (response) {
-    //     setMainData(response.data.data);
-    //     // alert("NOt data", response.data.data);
-    //     // setFilterData(response.data.data);
-    //     setSize(newPerPage);
-    //     setLoading(false);
-    //   })
-    //   .catch(function (err) {
-    //     localStorage.removeItem("Info");
-    //     window.location.reload();
-    //   });
   };
 
   useEffect(() => {
     fetchBillData();
-  }, [search, page]);
+  }, [search, page, perPage]);
 
   // useEffect(() => {
   //   fetchBillData(1); //fetch page 1 of categorys

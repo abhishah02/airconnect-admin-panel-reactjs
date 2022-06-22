@@ -25,25 +25,34 @@ const Category = () => {
   const [data, setData] = useState([]);
 
   const [show, setShow] = useState(false);
-  const [showUpdate, setShowUpdate] = useState(false);
+  // const [showUpdate, setShowUpdate] = useState(false);
 
-  const handleInsertClose = () => setShow(false);
+  const handleInsertClose = () => {
+    setUpdateId("");
+    setPname("");
+    setHsnId("");
+    setCategoryId("");
+    setDescription("");
+    setPrice("");
+    setImg([]);
+    setShow(false);
+  };
   const handleInsertShow = () => setShow(true);
 
   const [loading, setLoading] = useState(false);
   const [totalRows, setTotalRows] = useState(0);
-  const [size, setSize] = useState(10);
+  // const [size, setSize] = useState(10);
 
-  const handleUpdateClose = () => setShowUpdate(false);
+  // const handleUpdateClose = () => setShowUpdate(false);
   const handleUpdateShow = (row) => {
-    setUpdateId(row);
-    setUpdateCategoryId(row.CATEGORY_ID);
-    setUpdateHsnId(row.HSN_ID);
-    setUpdatePname(row.PRODUCT_NAME);
-    setUpdatePrice(row.PRODUCT_PRICE);
-    setUpdateDescription(row.PRODUCT_DESCRIPTION);
-    setUpdateImage(row);
-    setShowUpdate(true);
+    setUpdateId(row.PRODUCT_ID);
+    setCategoryId(row.CATEGORY_ID);
+    setHsnId(row.HSN_ID);
+    setPname(row.PRODUCT_NAME);
+    setPrice(row.PRODUCT_PRICE);
+    setDescription(row.PRODUCT_DESCRIPTION);
+    setImg(row);
+    setShow(true);
   };
 
   const editTooltip = (props) => (
@@ -142,7 +151,7 @@ const Category = () => {
 
     await axios
       .get(
-        `http://localhost:5000/getProduct?search=${search}&page=${page}&per_page=${size}&delay=1`,
+        `http://localhost:5000/getProduct?search=${search}&page=${page}&per_page=${perPage}&delay=1`,
         {
           headers: {
             Authorization: token,
@@ -275,6 +284,7 @@ const Category = () => {
   //This API is to store data using form.
   //insert data
 
+  const [updateId, setUpdateId] = useState("");
   const [cname, setCname] = useState([]);
   const [pname, setPname] = useState("");
   const [hsnId, setHsnId] = useState("");
@@ -294,7 +304,7 @@ const Category = () => {
     let token = "bearer " + items.token;
 
     const formData = new FormData();
-    formData.append("PRODUCT_ID", "");
+    formData.append("PRODUCT_ID", updateId);
     formData.append("CATEGORY_ID", categoryId);
     formData.append("HSN_ID", hsnId);
     formData.append("PRODUCT_NAME", pname);
@@ -318,10 +328,14 @@ const Category = () => {
     if (res.st) {
       toast.success(res.msg);
       setShow(false);
+      setUpdateId("");
       setPname("");
+      setHsnId("");
+      setCategoryId("");
       setDescription("");
       setPrice("");
-      fetchProducts(1);
+      setImg([]);
+      fetchProducts();
     } else {
       alert(res.msg);
     }
@@ -329,61 +343,60 @@ const Category = () => {
 
   //update data
 
-  const [updateId, setUpdateId] = useState("");
-  const [updatePname, setUpdatePname] = useState("");
-  // const [updateCname, setUpdateCname] = useState([])
-  const [updateHsnId, setUpdateHsnId] = useState("");
-  const [updateCategoryId, setUpdateCategoryId] = useState("");
-  const [updateDescription, setUpdateDescription] = useState("");
-  const [updatePrice, setUpdatePrice] = useState("");
-  const [updateImage, setUpdateImage] = useState([]);
+  // const [updatePname, setUpdatePname] = useState("");
+  // // const [updateCname, setUpdateCname] = useState([])
+  // const [updateHsnId, setUpdateHsnId] = useState("");
+  // const [updateCategoryId, setUpdateCategoryId] = useState("");
+  // const [updateDescription, setUpdateDescription] = useState("");
+  // const [updatePrice, setUpdatePrice] = useState("");
+  // const [updateImage, setUpdateImage] = useState([]);
 
-  const imgUpdateChange = (e) => {
-    setUpdateImage(e.target.files[0]);
-  };
+  // const imgUpdateChange = (e) => {
+  //   setUpdateImage(e.target.files[0]);
+  // };
 
-  const updateProduct = async (e) => {
-    e.preventDefault();
-    const items = JSON.parse(localStorage.getItem("Info"));
-    let token = "bearer " + items.token;
+  // const updateProduct = async (e) => {
+  //   e.preventDefault();
+  //   const items = JSON.parse(localStorage.getItem("Info"));
+  //   let token = "bearer " + items.token;
 
-    const formData = new FormData();
-    formData.append("PRODUCT_ID", updateId.PRODUCT_ID);
-    formData.append("CATEGORY_ID", updateCategoryId);
-    formData.append("HSN_ID", updateHsnId);
-    formData.append("PRODUCT_NAME", updatePname);
-    formData.append("PRODUCT_PRICE", updatePrice);
-    formData.append("PRODUCT_DESCRIPTION", updateDescription);
-    formData.append("PRODUCT_IMAGE", updateImage);
+  //   const formData = new FormData();
+  //   formData.append("PRODUCT_ID", updateId.PRODUCT_ID);
+  //   formData.append("CATEGORY_ID", updateCategoryId);
+  //   formData.append("HSN_ID", updateHsnId);
+  //   formData.append("PRODUCT_NAME", updatePname);
+  //   formData.append("PRODUCT_PRICE", updatePrice);
+  //   formData.append("PRODUCT_DESCRIPTION", updateDescription);
+  //   formData.append("PRODUCT_IMAGE", updateImage);
 
-    //result api
-    const result = await axios.post(
-      "http://localhost:5000/insertEditProduct",
-      formData,
-      {
-        method: "POST",
-        headers: {
-          Authorization: token,
-          enctype: "multipart/form-data",
-        },
-      }
-    );
+  //   //result api
+  //   const result = await axios.post(
+  //     "http://localhost:5000/insertEditProduct",
+  //     formData,
+  //     {
+  //       method: "POST",
+  //       headers: {
+  //         Authorization: token,
+  //         enctype: "multipart/form-data",
+  //       },
+  //     }
+  //   );
 
-    let res = await result.data;
-    console.log(res);
-    if (res.st) {
-      // alert(res.msg);
-      toast.success(res.msg);
-      setShowUpdate(false);
-      fetchProducts(1);
-    } else {
-      alert(res.msg);
-    }
-  };
+  //   let res = await result.data;
+  //   console.log(res);
+  //   if (res.st) {
+  //     // alert(res.msg);
+  //     toast.success(res.msg);
+  //     setShowUpdate(false);
+  //     fetchProducts(1);
+  //   } else {
+  //     alert(res.msg);
+  //   }
+  // };
 
   useEffect(() => {
     fetchProducts();
-  }, [search, page]);
+  }, [search, page, perPage]);
 
   useEffect(() => {
     // fetchProducts(1); //fetch page 1 of categorys
@@ -430,6 +443,7 @@ const Category = () => {
                             >
                               <Form.Select
                                 aria-label="Floating label select example"
+                                value={categoryId}
                                 onChange={(e) => setCategoryId(e.target.value)}
                               >
                                 <option>select category</option>
@@ -453,6 +467,7 @@ const Category = () => {
                             >
                               <Form.Select
                                 aria-label="Floating label select example"
+                                value={hsnId}
                                 onChange={(e) => setHsnId(e.target.value)}
                               >
                                 <option>select HSN Code</option>
@@ -527,7 +542,7 @@ const Category = () => {
                     {/* //=+=+=+==+=+=+==+=+=+==+=+=+==+=+=+==+=+=+==+=+=+==+=+=+==+=+=+==+=+=+==+=+=+==+=+=+==+=+=+==+=+=+= */}
 
                     {/* update product form */}
-                    <Modal show={showUpdate} onHide={handleUpdateClose}>
+                    {/* <Modal show={showUpdate} onHide={handleUpdateClose}>
                       <Modal.Header closeButton>
                         <Modal.Title>Update Data Form</Modal.Title>
                       </Modal.Header>
@@ -639,7 +654,7 @@ const Category = () => {
                           Save Changes
                         </Button>
                       </Modal.Footer>
-                    </Modal>
+                    </Modal> */}
                     {/* //=+=+=+==+=+=+==+=+=+==+=+=+==+=+=+==+=+=+==+=+=+==+=+=+==+=+=+==+=+=+==+=+=+==+=+=+==+=+=+==+=+=+= */}
                     <DataTable
                       title="Products"

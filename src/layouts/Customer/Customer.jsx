@@ -23,24 +23,33 @@ const Customer = () => {
 
   const [loading, setLoading] = useState(false);
   const [totalRows, setTotalRows] = useState(0);
-  const [size, setSize] = useState(10);
+  // const [size, setSize] = useState(10);
 
   //form open and close
   const [show, setShow] = useState(false);
-  const handleInsertClose = () => setShow(false);
+  const handleInsertClose = () => {
+    setUpdateId("");
+    setName("");
+    setNumberOne("");
+    setNumbertwo("");
+    setAddress("");
+    setStateId("");
+    setCityId("");
+    setShow(false);
+  };
   const handleInsertShow = () => setShow(true);
 
-  const [showUpdate, setShowUpdate] = useState(false);
-  const handleUpdateClose = () => setShowUpdate(false);
+  // const [showUpdate, setShowUpdate] = useState(false);
+  // const handleUpdateClose = () => setShowUpdate(false);
   const handleUpdateShow = (row) => {
-    setUpdateId(row);
-    setUpdateName(row.CUSTOMER_NAME);
-    setUpdateNumberOne(row.CUSTOMER_PHONE_NO);
-    setUpdateNumbertwo(row.CUSTOMER_WHATSAPP_NO);
-    setUpdateAddress(row.CUSTOMER_ADDRESS);
-    setUpdateCityId(row.CITY_ID);
-    setUpdateStatesId(row.STATE_ID);
-    setShowUpdate(true);
+    setUpdateId(row.CUSTOMER_ID);
+    setName(row.CUSTOMER_NAME);
+    setNumberOne(row.CUSTOMER_PHONE_NO);
+    setNumbertwo(row.CUSTOMER_WHATSAPP_NO);
+    setAddress(row.CUSTOMER_ADDRESS);
+    setStateId(row.STATE_ID);
+    setCityId(row.CITY_ID);
+    setShow(true);
   };
 
   const [page, setPage] = useState(1);
@@ -104,6 +113,7 @@ const Customer = () => {
           >
             <i
               className="fe fe-edit fa-2x"
+              // onClick={() => alert(JSON.stringify(row))}
               onClick={() => handleUpdateShow(row)}
             ></i>
           </OverlayTrigger>
@@ -132,7 +142,7 @@ const Customer = () => {
 
     await axios
       .get(
-        `http://localhost:5000/getCustomer?search=${search}&page=${page}&per_page=${size}&delay=1`,
+        `http://localhost:5000/getCustomer?search=${search}&page=${page}&per_page=${perPage}&delay=1`,
         {
           headers: {
             Authorization: token,
@@ -158,30 +168,6 @@ const Customer = () => {
 
   const handlePerRowsChange = async (newPerPage) => {
     setPerPage(newPerPage);
-    // const items = JSON.parse(localStorage.getItem("Info"));
-    // let token = "bearer " + items.token;
-    // setLoading(true);
-
-    // await axios
-    //   .get(
-    //     `http://localhost:5000/getCustomer?search=${search}&page=${page}&per_page=${newPerPage}&delay=1`,
-    //     {
-    //       headers: {
-    //         Authorization: token,
-    //         enctype: "multipart/form-data",
-    //       },
-    //     }
-    //   )
-    //   .then(function (response) {
-    //     setData(response.data.data);
-    //     // setFilterData(response.data.data);
-    //     setSize(newPerPage);
-    //     setLoading(false);
-    //   })
-    //   .catch(function (err) {
-    //     localStorage.removeItem("Info");
-    //     window.location.reload();
-    //   });
   };
 
   //=+=+=+==+=+=+==+=+=+==+=+=+==+=+=+==+=+=+==+=+=+==+=+=+==+=+=+==+=+=+==+=+=+==+=+=+==+=+=+==+=+=+=
@@ -222,7 +208,7 @@ const Customer = () => {
         `http://localhost:5000/getCityData`,
         {
           STATE_ID: stateId,
-          USTATE_ID: updateStatesId,
+          // USTATE_ID: updateStatesId,
         },
         {
           headers: {
@@ -243,38 +229,39 @@ const Customer = () => {
   //=+=+=+==+=+=+==+=+=+==+=+=+==+=+=+==+=+=+==+=+=+==+=+=+==+=+=+==+=+=+==+=+=+==+=+=+==+=+=+==+=+=+=
   //This API is use for get updated city name
 
-  const [updateCityName, setUpdateCityName] = useState([]);
+  // const [updateCityName, setUpdateCityName] = useState([]);
 
-  const fetchUpdatedCities = async () => {
-    const items = JSON.parse(localStorage.getItem("Info"));
-    let token = "bearer " + items.token;
+  // const fetchUpdatedCities = async () => {
+  //   const items = JSON.parse(localStorage.getItem("Info"));
+  //   let token = "bearer " + items.token;
 
-    await axios
-      .post(
-        `http://localhost:5000/getCityData`,
-        {
-          STATE_ID: updateStatesId,
-        },
-        {
-          headers: {
-            Authorization: token,
-          },
-        }
-      )
-      .then(function (res) {
-        // alert(stateId);
-        setUpdateCityName(res.data.data);
-      })
-      .catch(function (err) {
-        localStorage.removeItem("Info");
-        window.location.reload();
-      });
-  };
+  //   await axios
+  //     .post(
+  //       `http://localhost:5000/getCityData`,
+  //       {
+  //         STATE_ID: updateStatesId,
+  //       },
+  //       {
+  //         headers: {
+  //           Authorization: token,
+  //         },
+  //       }
+  //     )
+  //     .then(function (res) {
+  //       // alert(stateId);
+  //       setUpdateCityName(res.data.data);
+  //     })
+  //     .catch(function (err) {
+  //       localStorage.removeItem("Info");
+  //       window.location.reload();
+  //     });
+  // };
 
   //=+=+=+==+=+=+==+=+=+==+=+=+==+=+=+==+=+=+==+=+=+==+=+=+==+=+=+==+=+=+==+=+=+==+=+=+==+=+=+==+=+=+=
   //This API is to store data using form.
   //insert data
 
+  const [updateId, setUpdateId] = useState("");
   const [name, setName] = useState("");
   const [numberOne, setNumberOne] = useState("");
   const [numberTwo, setNumbertwo] = useState("");
@@ -292,7 +279,7 @@ const Customer = () => {
     const result = await axios.post(
       "http://localhost:5000/insertEditCustomer",
       JSON.stringify({
-        CUSTOMER_ID: "",
+        CUSTOMER_ID: updateId,
         CUSTOMER_NAME: name,
         CUSTOMER_PHONE_NO: numberOne,
         CUSTOMER_WHATSAPP_NO: numberTwo,
@@ -313,12 +300,14 @@ const Customer = () => {
       // alert(res.msg);
       toast.success(res.msg);
       setShow(false);
+      setUpdateId("");
       setName("");
       setNumberOne("");
       setNumbertwo("");
       setAddress("");
-
-      fetchCustomer(1);
+      setStateId("");
+      setCityId("");
+      fetchCustomer();
     } else {
       alert(res.msg);
     }
@@ -356,53 +345,51 @@ const Customer = () => {
 
   // update data
 
-  const [updateId, setUpdateId] = useState("");
+  // const [updateName, setUpdateName] = useState("");
+  // const [updateNumberOne, setUpdateNumberOne] = useState("");
+  // const [updateNumberTwo, setUpdateNumbertwo] = useState("");
+  // const [updateAddress, setUpdateAddress] = useState("");
+  // const [updateCityId, setUpdateCityId] = useState("");
+  // const [updateStatesId, setUpdateStatesId] = useState("");
 
-  const [updateName, setUpdateName] = useState("");
-  const [updateNumberOne, setUpdateNumberOne] = useState("");
-  const [updateNumberTwo, setUpdateNumbertwo] = useState("");
-  const [updateAddress, setUpdateAddress] = useState("");
-  const [updateCityId, setUpdateCityId] = useState("");
-  const [updateStatesId, setUpdateStatesId] = useState("");
+  // const updateCustomer = async (e) => {
+  //   e.preventDefault();
+  //   const items = JSON.parse(localStorage.getItem("Info"));
+  //   let token = "bearer " + items.token;
 
-  const updateCustomer = async (e) => {
-    e.preventDefault();
-    const items = JSON.parse(localStorage.getItem("Info"));
-    let token = "bearer " + items.token;
-
-    const result = await axios.post(
-      "http://localhost:5000/insertEditCustomer",
-      JSON.stringify({
-        CUSTOMER_ID: updateId.CUSTOMER_ID,
-        CUSTOMER_NAME: updateName,
-        CUSTOMER_PHONE_NO: updateNumberOne,
-        CUSTOMER_WHATSAPP_NO: updateNumberTwo,
-        CUSTOMER_ADDRESS: updateAddress,
-        CITY_ID: updateCityId,
-        STATE_ID: updateStatesId,
-      }),
-      {
-        headers: {
-          "Content-type": "application/json",
-          Authorization: token,
-        },
-      }
-    );
-    let res = await result.data;
-    console.log(res);
-    if (res.st) {
-      // alert(res.msg);
-      toast.success(res.msg);
-      setShowUpdate(false);
-      fetchCustomer(1);
-    } else {
-      alert(res.msg);
-    }
-  };
+  //   const result = await axios.post(
+  //     "http://localhost:5000/insertEditCustomer",
+  //     JSON.stringify({
+  //       CUSTOMER_ID: updateId.CUSTOMER_ID,
+  //       CUSTOMER_NAME: updateName,
+  //       CUSTOMER_PHONE_NO: updateNumberOne,
+  //       CUSTOMER_WHATSAPP_NO: updateNumberTwo,
+  //       CUSTOMER_ADDRESS: updateAddress,
+  //       CITY_ID: updateCityId,
+  //       STATE_ID: updateStatesId,
+  //     }),
+  //     {
+  //       headers: {
+  //         "Content-type": "application/json",
+  //         Authorization: token,
+  //       },
+  //     }
+  //   );
+  //   let res = await result.data;
+  //   console.log(res);
+  //   if (res.st) {
+  //     // alert(res.msg);
+  //     toast.success(res.msg);
+  //     setShowUpdate(false);
+  //     fetchCustomer(1);
+  //   } else {
+  //     alert(res.msg);
+  //   }
+  // };
 
   useEffect(() => {
     fetchCustomer();
-  }, [search, page]);
+  }, [search, page, perPage]);
 
   // useEffect(() => {
   //   fetchCustomer(1); //fetch page 1 of categorys
@@ -411,8 +398,9 @@ const Customer = () => {
   useEffect(() => {
     fetchStates();
     fetchCities();
-    fetchUpdatedCities();
-  }, [stateId, updateStatesId]);
+    // fetchUpdatedCities();
+  }, [stateId]);
+  // updateStatesId
 
   return (
     <>
@@ -499,6 +487,7 @@ const Customer = () => {
                             >
                               <Form.Select
                                 aria-label="Floating label select example"
+                                value={stateId}
                                 onChange={(e) => setStateId(e.target.value)}
                               >
                                 <option>select state</option>
@@ -506,6 +495,7 @@ const Customer = () => {
                                   <option
                                     key={items.STATE_ID}
                                     value={items.STATE_ID}
+                                    selected={setStateId}
                                   >
                                     {" "}
                                     {items.STATE_NAME}{" "}
@@ -524,6 +514,7 @@ const Customer = () => {
                             >
                               <Form.Select
                                 aria-label="Floating label select example"
+                                value={cityId}
                                 onChange={(e) => setCityId(e.target.value)}
                               >
                                 <option>select city</option>
@@ -531,6 +522,7 @@ const Customer = () => {
                                   <option
                                     key={items.CITY_ID}
                                     value={items.CITY_ID}
+                                    selected={setCityId}
                                   >
                                     {" "}
                                     {items.CITY_NAME}{" "}
@@ -556,7 +548,7 @@ const Customer = () => {
                     </Modal>
 
                     {/* update Customer form */}
-                    <Modal show={showUpdate} onHide={handleUpdateClose}>
+                    {/* <Modal show={showUpdate} onHide={handleUpdateClose}>
                       <Modal.Header closeButton>
                         <Modal.Title>Update Data Form</Modal.Title>
                       </Modal.Header>
@@ -684,7 +676,7 @@ const Customer = () => {
                           Save Changes
                         </Button>
                       </Modal.Footer>
-                    </Modal>
+                    </Modal> */}
                     {/* //=+=+=+==+=+=+==+=+=+==+=+=+==+=+=+==+=+=+==+=+=+==+=+=+==+=+=+==+=+=+==+=+=+==+=+=+==+=+=+==+=+=+= */}
 
                     <DataTable

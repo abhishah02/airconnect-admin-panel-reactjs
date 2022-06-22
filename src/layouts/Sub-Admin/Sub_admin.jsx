@@ -29,23 +29,30 @@ const SubAdmin = () => {
 
   const [loading, setLoading] = useState(false);
   const [totalRows, setTotalRows] = useState(0);
-  const [size, setSize] = useState(10);
+  // const [size, setSize] = useState(10);
 
   const [show, setShow] = useState(false);
-  const handleInsertClose = () => setShow(false);
+  const handleInsertClose = () => {
+    setUpdateId("");
+    setName("");
+    setNumber("");
+    setEmail("");
+    setPassword("");
+    setRoleid("");
+    setShow(false);
+  };
   const handleInsertShow = () => setShow(true);
 
-  const [showUpdate, setShowUpdate] = useState(false);
-  const handleUpdateClose = () => setShowUpdate(false);
+  // const [showUpdate, setShowUpdate] = useState(false);
+  // const handleUpdateClose = () => setShowUpdate(false);
   const handleUpdateShow = (row) => {
-    setUpdateId(row);
-    setUpdateName(row.admin_name);
-    setUpdateNumber(row.admin_number);
-    setUpdateEmail(row.admin_email);
-    setUpdatePassword(row.admin_password);
-    setUpdateRoleid(row.ADMIN_ROLE_ID);
-
-    setShowUpdate(true);
+    setUpdateId(row.id);
+    setName(row.admin_name);
+    setNumber(row.admin_number);
+    setEmail(row.admin_email);
+    setPassword();
+    setRoleid(row.ADMIN_ROLE_ID);
+    setShow(true);
   };
 
   const [page, setPage] = useState(1);
@@ -154,7 +161,7 @@ const SubAdmin = () => {
 
     await axios
       .get(
-        `http://localhost:5000/getSubAdmin?search=${search}&page=${page}&per_page=${size}&delay=1`,
+        `http://localhost:5000/getSubAdmin?search=${search}&page=${page}&per_page=${perPage}&delay=1`,
         {
           headers: {
             Authorization: token,
@@ -212,6 +219,7 @@ const SubAdmin = () => {
   //This API is to store data using form.
   //insert data
 
+  const [updateId, setUpdateId] = useState("");
   const [name, setName] = useState("");
   const [number, setNumber] = useState("");
   const [email, setEmail] = useState("");
@@ -227,7 +235,7 @@ const SubAdmin = () => {
     const result = await axios.post(
       "http://localhost:5000/insertEditAdmin",
       JSON.stringify({
-        id: "",
+        id: updateId,
         admin_name: name,
         admin_number: number,
         admin_email: email,
@@ -246,11 +254,13 @@ const SubAdmin = () => {
       // toast.success(res.msg);
       alert(res.msg);
       setShow(false);
-      fetchSubAdmin();
+      setUpdateId("");
       setName("");
       setNumber("");
       setEmail("");
       setPassword("");
+      setRoleid("");
+      fetchSubAdmin();
     } else {
       alert(res.msg);
     }
@@ -259,52 +269,51 @@ const SubAdmin = () => {
   //This API is to store data using form.
   //update data
 
-  const [updateId, setUpdateId] = useState("");
-  const [updateName, setUpdateName] = useState("");
-  const [updateNumber, setUpdateNumber] = useState("");
-  const [updateEmail, setUpdateEmail] = useState("");
-  const [updatePassword, setUpdatePassword] = useState("");
-  const [updateRoleid, setUpdateRoleid] = useState("");
+  // const [updateName, setUpdateName] = useState("");
+  // const [updateNumber, setUpdateNumber] = useState("");
+  // const [updateEmail, setUpdateEmail] = useState("");
+  // const [updatePassword, setUpdatePassword] = useState("");
+  // const [updateRoleid, setUpdateRoleid] = useState("");
 
-  const updateSubAdmin = async (e) => {
-    e.preventDefault();
-    const items = JSON.parse(localStorage.getItem("Info"));
-    let token = "bearer " + items.token;
+  // const updateSubAdmin = async (e) => {
+  //   e.preventDefault();
+  //   const items = JSON.parse(localStorage.getItem("Info"));
+  //   let token = "bearer " + items.token;
 
-    const result = await axios.post(
-      "http://localhost:5000/insertEditAdmin",
-      JSON.stringify({
-        id: updateId.id,
-        admin_name: updateName,
-        admin_number: updateNumber,
-        admin_email: updateEmail,
-        admin_password: updatePassword,
-        ADMIN_ROLE_ID: updateRoleid,
-      }),
-      {
-        headers: {
-          "Content-type": "application/json",
-          Authorization: token,
-        },
-      }
-    );
-    let res = await result.data;
-    console.log(res);
-    if (res.st) {
-      // alert(res.msg);
-      toast.success(res.msg);
-      setShowUpdate(false);
-      fetchSubAdmin();
-    } else {
-      alert(res.msg);
-    }
-  };
+  //   const result = await axios.post(
+  //     "http://localhost:5000/insertEditAdmin",
+  //     JSON.stringify({
+  //       id: updateId.id,
+  //       admin_name: updateName,
+  //       admin_number: updateNumber,
+  //       admin_email: updateEmail,
+  //       admin_password: updatePassword,
+  //       ADMIN_ROLE_ID: updateRoleid,
+  //     }),
+  //     {
+  //       headers: {
+  //         "Content-type": "application/json",
+  //         Authorization: token,
+  //       },
+  //     }
+  //   );
+  //   let res = await result.data;
+  //   console.log(res);
+  //   if (res.st) {
+  //     // alert(res.msg);
+  //     toast.success(res.msg);
+  //     setShowUpdate(false);
+  //     fetchSubAdmin();
+  //   } else {
+  //     alert(res.msg);
+  //   }
+  // };
   //=+=+=+==+=+=+==+=+=+==+=+=+==+=+=+==+=+=+==+=+=+==+=+=+==+=+=+==+=+=+==+=+=+==+=+=+==+=+=+==+=+=+=
 
   useEffect(() => {
     // fetchBillData();
     fetchSubAdmin();
-  }, [search, page]);
+  }, [search, page, perPage]);
 
   useEffect(() => {
     // fetchBillData(1); //fetch page 1 of categorys
@@ -392,6 +401,7 @@ const SubAdmin = () => {
                             >
                               <Form.Select
                                 aria-label="Floating label select example"
+                                value={roleid}
                                 onChange={(e) => setRoleid(e.target.value)}
                               >
                                 <option>select Role</option>
@@ -425,7 +435,7 @@ const SubAdmin = () => {
 
                     {/* //=+=+=+==+=+=+==+=+=+==+=+=+==+=+=+==+=+=+==+=+=+==+=+=+==+=+=+==+=+=+==+=+=+==+=+=+==+=+=+==+=+=+= */}
                     {/* Update Sub Admin form */}
-                    <Modal show={showUpdate} onHide={handleUpdateClose}>
+                    {/* <Modal show={showUpdate} onHide={handleUpdateClose}>
                       <Modal.Header closeButton>
                         <Modal.Title>Update Data Form</Modal.Title>
                       </Modal.Header>
@@ -517,7 +527,7 @@ const SubAdmin = () => {
                           Save Changes
                         </Button>
                       </Modal.Footer>
-                    </Modal>
+                    </Modal> */}
                     {/* //=+=+=+==+=+=+==+=+=+==+=+=+==+=+=+==+=+=+==+=+=+==+=+=+==+=+=+==+=+=+==+=+=+==+=+=+==+=+=+==+=+=+= */}
 
                     <DataTable
